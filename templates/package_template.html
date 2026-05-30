@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>{{TITLE}}</title>
+<style>
+  /* === База === */
+  @page {
+    size: A4;
+    margin: 65px 70px 40px 70px;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI",
+                 "Liberation Sans", Arial, sans-serif;
+    font-size: 15pt;
+    line-height: 1.55;
+    color: #1f2937;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  p { margin: 0 0 0.85em 0; }
+  strong { color: #0f172a; font-weight: 600; }
+  em { font-style: italic; }
+
+  /* === Заголовки === */
+  h1 {
+    font-size: 38pt;
+    line-height: 1.1;
+    margin: 0 0 6px 0;
+    font-weight: 700;
+    letter-spacing: -1.2px;
+    color: #0f172a;
+  }
+
+  .doc-meta {
+    font-size: 11pt;
+    color: #64748b;
+    margin: 0 0 28px 0;
+    letter-spacing: 0.3px;
+  }
+
+  h2 {
+    font-size: 21pt;
+    line-height: 1.25;
+    margin: 32px 0 14px 0;
+    font-weight: 700;
+    color: #0f172a;
+    page-break-after: avoid;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 16pt;
+    line-height: 1.3;
+    margin: 22px 0 8px 0;
+    font-weight: 600;
+    color: #1e293b;
+    page-break-after: avoid;
+  }
+
+  /* === Цитаты / blockquote === */
+  blockquote {
+    margin: 18px 0;
+    padding: 14px 20px;
+    border-left: 4px solid #2563eb;
+    background: #f1f5f9;
+    color: #1e293b;
+    font-size: 14.5pt;
+    line-height: 1.5;
+    page-break-inside: avoid;
+    border-radius: 0 6px 6px 0;
+  }
+
+  blockquote p { margin: 0; }
+  blockquote strong { color: #0f172a; }
+
+  /* === Callouts === */
+  .callout-step {
+    margin: 18px 0;
+    padding: 14px 20px;
+    border-left: 4px solid #f59e0b;
+    background: #fef3c7;
+    color: #78350f;
+    font-size: 14.5pt;
+    line-height: 1.5;
+    page-break-inside: avoid;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .callout-info {
+    margin: 18px 0;
+    padding: 14px 20px;
+    border-left: 4px solid #0ea5e9;
+    background: #e0f2fe;
+    color: #0c4a6e;
+    font-size: 14.5pt;
+    line-height: 1.5;
+    page-break-inside: avoid;
+    border-radius: 0 6px 6px 0;
+  }
+
+  /* === Связки === */
+  .link-block {
+    margin: 16px 0;
+    padding: 14px 18px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    page-break-inside: avoid;
+  }
+
+  .link-block .link-title {
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 4px;
+  }
+
+  .link-block .link-arrow {
+    color: #2563eb;
+    font-weight: 600;
+  }
+
+  /* === Шестерёнки === */
+  .gear {
+    margin: 18px 0;
+    padding: 16px 20px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #2563eb;
+    border-radius: 8px;
+    font-size: 14.5pt;
+    line-height: 1.5;
+    page-break-inside: avoid;
+  }
+
+  .gear-title {
+    font-size: 15pt;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 8px 0;
+  }
+
+  .gear-num {
+    color: #2563eb;
+    margin-right: 6px;
+  }
+
+  .gear-arrow {
+    text-align: center;
+    color: #2563eb;
+    font-size: 18pt;
+    line-height: 1;
+    margin: 6px 0;
+    page-break-inside: avoid;
+  }
+
+  /* === Списки === */
+  ol, ul {
+    margin: 8px 0 14px 0;
+    padding-left: 26px;
+  }
+  li { margin: 4px 0; }
+
+  /* === Закрытие — две фразы курсивом, по центру === */
+  .closing {
+    margin-top: 14px;
+    page-break-inside: avoid;
+    page-break-before: avoid;
+  }
+  .closing p {
+    text-align: center;
+    font-style: italic;
+    color: #475569;
+    font-size: 13.5pt;
+    line-height: 1.5;
+    margin: 6px 24px;
+  }
+
+  /* === Разрывы страниц по секциям === */
+  .section-break {
+    page-break-before: always;
+  }
+
+  /* Сноска — мелкая разделительная линия перед закрытием */
+  hr.closing-sep {
+    border: 0;
+    border-top: 1px solid #e2e8f0;
+    margin: 12px 80px;
+  }
+</style>
+</head>
+<body>
+
+<h1>{{TITLE}}</h1>
+<div class="doc-meta">{{DATE}}</div>
+
+<p>{{GREETING}}</p>
+
+{{INTRO}}
+
+<h2>Где ты сейчас</h2>
+{{SECTION_HERE_NOW}}
+
+<h2>Куда хочешь дойти</h2>
+{{SECTION_GOAL}}
+
+<h2>Связки</h2>
+{{SECTION_CONNECTIONS}}
+
+<h2>И ещё одна вещь — про режим работы</h2>
+{{SECTION_REGIME}}
+
+<h2>Колесо</h2>
+{{SECTION_WHEEL}}
+
+<h2>Если решишь двигаться</h2>
+{{SECTION_NEXT}}
+
+<h2>Что ещё стоит уточнить</h2>
+{{SECTION_OPEN}}
+
+<hr class="closing-sep">
+<div class="closing">
+{{CLOSING}}
+</div>
+
+</body>
+</html>
