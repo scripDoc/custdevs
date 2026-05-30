@@ -149,3 +149,11 @@ Append-only лог. Каждый раз когда что-то пошло не �
 - НЕ удалять родительскую `custdevs-project/` пока пуш реально не подтверждён — новый custdevs/.git до пуша единственная копия работы сессии.
 - Если для `custdevs-project/.git` понадобится remote — сначала `git filter-repo`/BFG вычистить историю от `clients/*` и бинарников.
 **Теги:** #git #privacy #pii #push #github #security #environment
+
+### 2026-05-31 — Новый субагент из .claude/agents/ не виден реестру Agent до перезапуска сессии
+**Контекст:** Этап 1 AI-Office. Создал `.claude/agents/client-strategist.md`, в той же сессии попытался запустить его через инструмент Agent (subagent_type: client-strategist).
+**Симптом:** `Agent type 'client-strategist' not found. Available agents: claude, claude-code-guide, Explore, general-purpose, Plan, statusline-setup`. Кастомного агента в списке нет, хотя файл создан корректно.
+**Причина:** реестр доступных субагентов фиксируется на старте сессии Claude Code. Файлы агентов, созданные в середине сессии, не подхватываются до перезапуска (аналогично подхвату skills, но skills в этой сборке цепляются динамически, а agents — нет).
+**Решение:** для немедленного теста прогнал верный эквивалент — `general-purpose` агент, которому в prompt подан дословный system-prompt из файла агента. Поведение идентично. Для штатной работы под именем `client-strategist` нужен рестарт сессии (или нового окна), после чего агент появится в реестре.
+**Правило на будущее:** после создания/правки файла в `.claude/agents/` — перезапустить сессию, иначе вызов по имени упадёт с "not found". На лету тестировать через general-purpose + вставку system-prompt.
+**Теги:** #environment #agents #subagent #claude-code #ai-office
