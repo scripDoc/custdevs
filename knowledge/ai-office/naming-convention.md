@@ -37,9 +37,10 @@ live URL
 | `product_plan.md` | product-architect | Алик | `clients/<slug>/` | План реализации: стек, сложность, этапы, открытые вопросы |
 | `copywriter_draft.md` | dr-copywriter | landing-designer, frontend-dev | `clients/<slug>/` | Продающий текст по секциям + логика + stop-slop score |
 | `design_spec.md` | landing-designer | frontend-dev | `clients/<slug>/` | Дизайн-спека: концепция, типографика, цвет, секции, движение, Cialdini |
-| `deliverables/<slug>/` | frontend-dev | Алик / deploy_landing | `deliverables/<slug>/` | Готовый статический лендинг (index.html + ассеты), к деплою |
+| `deliverables/<slug>/` | frontend-dev | frontend-dev → `deploy_landing` (сам), Алик | `deliverables/<slug>/` | Готовый статический лендинг (index.html + ассеты); фронтендер деплоит сам → live URL |
 | `_agent_notes.md` | все агенты (опц.) | Алик (Этап 1) / Директор (Этап 2) | `clients/<slug>/` | Голос сотрудника: замечания/предложения/эскалации между агентами |
 | `_director_report.md` | director | Алик | `clients/<slug>/` | Диагностика прогона: стадии, заметки, гейты, эскалации, проседания |
+| `_run_logs/run_<id>_<date>.log` | director (+ агенты) | Алик / диагностика | `clients/<slug>/_run_logs/` | Сырой лог прогона: действия с timestamp + RUN ID. Ведётся всегда, для сравнения прогонов |
 
 ## Правила
 
