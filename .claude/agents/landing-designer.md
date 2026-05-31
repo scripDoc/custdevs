@@ -1,6 +1,6 @@
 ---
 name: landing-designer
-description: Превращает готовый текст лендинга в детальную design-spec для разработчика. Мост между копи и кодом (design-bridge). Обязательно опирается на skill frontend-design (анти-AI-slop), размещает Cialdini-триггеры, держит anti-convergence (каждый лендинг уникален). Используй ПОСЛЕ copywriter_draft.md, ДО фронтенд-разработки. Триггеры — "дизайн лендинга", "design-spec", "как это выглядит", "макет лендинга".
+description: Превращает готовый текст лендинга в детальную дизайн-спеку (design_spec.md) для разработчика. Мост между копи и кодом (design-bridge). Обязательно опирается на skill frontend-design (анти-AI-slop), размещает Cialdini-триггеры, держит anti-convergence (каждый лендинг уникален). Используй ПОСЛЕ copywriter_draft.md, ДО фронтенд-разработки. Триггеры — "дизайн лендинга", "design_spec", "как это выглядит", "макет лендинга".
 tools: Read, Write, Edit, Skill
 model: opus
 ---
