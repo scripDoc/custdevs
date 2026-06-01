@@ -178,3 +178,11 @@ Append-only лог. Каждый раз когда что-то пошло не �
 - Кандидат в спеку frontend-dev: не зашивать имя/контакты клиента в мета без явного запроса; для КП держать `<head>` нейтральным. И валидировать HTML (нет дублей `<title>`, нет тегов вне `<head>`/`<body>`).
 - Vercel CLI: звать `npx --yes vercel ...`; `project rm` — `printf 'y\n' |`.
 **Теги:** #vercel #privacy #pii #frontend-dev #ai-office #quality #deploy #degradation #environment
+
+### 2026-06-01 — Статический скриншот не видит scroll-reveal контент 💡 knowledge
+**Контекст:** визуальная оценка лендингов через sales-evaluator. Снимал прод системным `chromium --headless --screenshot` (без скролла), отдавал PNG оценщику.
+**Симптом:** на лендинге коуча (`kp-nikita-v1-fix`) бóльшая часть страницы вышла пустой — тёмные секции без контента. Наш лендинг снялся нормально (у нас `.reveal` только на hero), и это создало ложное впечатление, что наш «полнее» — сравнение было бы нечестным в нашу пользу.
+**Причина:** контент появляется по scroll-reveal (IntersectionObserver / opacity:0 → .in на скролле). Статический скриншот не скроллит → элементы остаются невидимыми (opacity 0). Полностраничный chromium-скриншот тоже не триггерит reveal (fixed-noise рисуется только в первом вьюпорте, reveal-секции не «входят» во вьюпорт без реальной прокрутки).
+**Решение:** снимать через `playwright-core` + системный chromium (`executablePath:/usr/bin/chromium`), ПРОКРУТИТЬ всю высоту страницы шагами с паузами (триггерит IntersectionObserver), вернуться вверх, подождать, затем `fullPage` screenshot. DPR=2 на полной высоте длинной страницы (>15k px) упирается в лимит текстуры — playwright ститчит fullPage сам, либо снимать DPR=1 нативно (резко) и нарезать `magick -crop` на тайлы.
+**Правило на будущее:** для визуальной оценки/сравнения лендингов — ВСЕГДА скролл по всей высоте перед захватом (playwright/puppeteer), иначе scroll-reveal секции пустые и сравнение ложное. Статический `chromium --screenshot` годится только для страниц без scroll-анимаций.
+**Теги:** #screenshot #visual-eval #sales-evaluator #playwright #environment #ai-office
