@@ -201,5 +201,9 @@ Tools: Read, Write, Edit, Skill.
 - Никита — пилот офиса (его лендинг переделываем ЧЕРЕЗ офис, не вручную)
 - Конвенция имён артефактов — зафиксирована отдельно: `naming-convention.md` (strategist_brief.md, product_spec_brief.md, product_plan.md, copywriter_draft.md, design_spec.md, deliverables/<slug>/, _agent_notes.md, _director_report.md)
 
+## Уроки / выводы
+- **Потолок продающей силы = зрелость продукта, не качество копи** — `lessons-quality-ceiling.md`. Честный потолок копи ≈65/80, дальше двигает первый кейс + демо, не текст. Не зацикливать итерации лендинга. Честность выдержала стресс-тест «дай максимум» (reward-hacking не случился).
+- **Бенчмарк против лендинга коуча** — `benchmark_coach_vs_ours.md`. Паритет по продаже (91 vs 90), мы честнее (architect-проверка vs мины коуча).
+
 ## История исследований
 - Детальные разборы оркестрирующих систем: orchestration-research.md
