@@ -97,10 +97,11 @@ find custdevs -type f | sort | head -30
 
 ## Дальнейшие шаги (после bootstrap)
 
-После того как всё разверну, я положу аудиофайл с разговором в `custdevs/clients/vladimir/01_audio/`, и мы прогоним полный workflow:
+После того как всё разверну, я положу аудиофайл с разговором в `custdevs/clients/vladimir/01_audio/`, и мы прогоним workflow (transcript-only):
 1. Транскрибация → `02_transcript/`
-2. Структурный разбор по промпту из `templates/structure_prompt.md` → `03_structure.md`
-3. Упаковка для отправки клиенту по `templates/package_prompt.md` → `04_package.md`
+2. Транскрипт уходит в лендинг-офис через Директора («сделай лендинг для <клиент>»).
+
+(Старый PDF-разбор structure/package/pdf выведен из эксплуатации → `_archive/old_pdf_pipeline/`.)
 
 ## Правила работы (от меня тебе)
 

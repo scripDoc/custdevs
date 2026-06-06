@@ -1,7 +1,10 @@
 # Кастдевы для AI-автоматизации
 
 Локальная система для проведения и обработки кастдев-интервью.
-Workflow: аудио → расшифровка (faster-whisper local) → структурированный разбор (Claude) → персональная упаковка для клиента.
+Workflow (transcript-only): аудио → расшифровка + диаризация (Deepgram) → транскрипт → лендинг-офис (Директор).
+Старый PDF-разбор (структура → упаковка → PDF) выведен из эксплуатации → `_archive/old_pdf_pipeline/`.
+
+> Раздел «Установка» ниже частично устарел (faster-whisper local) — транскрибация теперь облачная (Deepgram). Чистка этого хвоста — отдельным заходом.
 
 ## Быстрый старт
 
@@ -38,32 +41,26 @@ print('OK, модель закеширована в ~/.cache/huggingface/')
 # 2.1. Создаём папку клиента
 ./scripts/new_client.sh vladimir
 
-# 2.2. Заполняем meta.md
-# (контекст про человека, как говорит, что важно)
-nvim clients/vladimir/meta.md
-
-# 2.3. Кладём исходник (webm с Телемоста / mp4 с Zoom / m4a-бэкап) в 00_raw/
+# 2.2. Кладём исходник (webm с Телемоста / mp4 с Zoom / m4a-бэкап) в 00_raw/
 cp ~/Downloads/call_with_vladimir.webm clients/vladimir/00_raw/
 
-# 2.4. Обрезаем нужный кусок и извлекаем аудио в 01_audio/
+# 2.3. Обрезаем нужный кусок и извлекаем аудио в 01_audio/
 #      (через скилл trim_video или вручную:)
 ffmpeg -ss 00:01:30 -to 00:45:00 -i clients/vladimir/00_raw/call_with_vladimir.webm \
     -vn -c:a aac -b:a 192k clients/vladimir/01_audio/call_with_vladimir.m4a
 
-# 2.5. Транскрибируем (на GTX 1650 SUPER ~10-15 мин на час)
+# 2.4. Транскрибируем (Deepgram nova-3 + диаризация, ключ из .env)
 python3 scripts/transcribe.py \
     clients/vladimir/01_audio/call_with_vladimir.m4a \
     -o clients/vladimir/02_transcript/
 
-# 2.6. Открываем шаблон промпта, копируем, добавляем расшифровку и meta.md,
-#      отдаём в Claude (claude.ai project или Claude Code)
-cat templates/structure_prompt.md
-# Результат сохраняем в clients/vladimir/03_structure.md
-
-# 2.7. Аналогично — упаковка
-cat templates/package_prompt.md
-# Результат в clients/vladimir/04_package.md — это и есть текст для отправки
+# 2.5. Транскрипт готов — это вход в лендинг-офис.
+#      В Claude Code: «сделай лендинг для vladimir» / «запусти офис»
+#      → Директор ведёт цепочку стратег → архитектор → копи → дизайн → фронт.
+#      (Старый PDF-разбор structure/package выведен в _archive/old_pdf_pipeline/.)
 ```
+
+Весь путь до транскрипта одной командой — скилл `kickoff` («новый кастдев»): опросник из двух блоков, потом автономный конвейер из 5 шагов до `02_transcript/`.
 
 ## Гибридный режим
 
@@ -74,15 +71,15 @@ cat templates/package_prompt.md
 
 В облаке:
 - Транскрибация + диаризация — Deepgram API (аудио уходит в облако Deepgram)
-- Разборы и упаковка — Claude
+- Лендинг-офис (стратег → … → фронт) — Claude / Claude Code
 
 > **Приватность.** С переходом на Deepgram аудио кастдева отправляется в облако (раньше транскрибация была локальной). Это меняет модель приватности клиентских данных — учитывать при работе с чувствительными записями. Deepgram по умолчанию не использует данные для обучения моделей, но запись покидает машину.
 
 В Claude Project на claude.ai:
 - Создать проект "Кастдевы AI-услуги"
-- В Knowledge загрузить: `CLAUDE.md`, `shared/custdev_protocol.md`, `templates/*`
+- В Knowledge загрузить: `CLAUDE.md`, `shared/custdev_protocol.md`, `knowledge/ai-office/`
 - На каждого клиента — отдельный чат
-- В чат подгружать `meta.md` + `transcript.md` + промпт из `templates/`
+- В чат подгружать `transcript.md` (единственный источник истины для офиса)
 
 Преимущество: история по клиентам, поиск, можно вернуться через месяц.
 
@@ -104,12 +101,9 @@ python3 -u scripts/transcribe.py file.m4a -o ./out/ --language ru
 Описана в `CLAUDE.md`. Кратко по клиенту:
 - `00_raw/` — исходники (webm с Телемоста, m4a-бэкапы с iPhone, любое сырьё). Не удаляются после обрезки — нужны для повторных прогонов.
 - `01_audio/` — готовый `.m4a` после обрезки, вход для `transcribe.py`.
-- `02_transcript/` — результат `transcribe.py`.
-- `03_structure.md` / `04_package.md` — разбор и упаковка для клиента.
+- `02_transcript/` — результат `transcribe.py`. **Финальный выход кастдев-конвейера и единственный вход в лендинг-офис.**
 
 ## Доработки в будущем
 
-- [ ] Скрипт для автоматического запроса structure → package (через Anthropic API)
 - [ ] Дашборд статусов по клиентам
-- [ ] Авто-публикация в Obsidian / Notion
 - [ ] Шаблоны промптов под разные ниши (мебельщики / кондитеры / терапевты)
